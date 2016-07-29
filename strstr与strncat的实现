@@ -1,0 +1,93 @@
+#define _CRT_SECURE_NO_WARNINGS 1re
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<assert.h>
+2.再次模拟实现strstr函数。
+char * my_strstr(const char *str,const char *str1)
+{
+	char *start=NULL;
+	char *end=NULL;
+	char *s=NULL;
+	char *p=NULL;
+   assert(str!=NULL);
+   assert(str1!=NULL);
+   end=str1+strlen(str1);
+   p=str;
+   s=str1;
+   while(str!='\0')
+   {
+     start=p;
+	 s=str1;
+	 while(*s==*start)
+	 {
+	   s++;
+	   start++;
+	   if(s==end)
+	   {
+	     return p;
+	   }
+	 }
+	 p++;
+   }
+   return NULL;
+}
+int main()
+{
+
+	char str[50]={0};
+	char str1[50]={0};
+	char *ret=NULL;
+    gets(str);
+	gets(str1);
+	ret=my_strstr(str,str1);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+int Add(int x, int y)
+{
+	int ret = 0;
+	ret = x+y;
+	return ret;
+}
+int main()
+{
+	int a = 10;
+	int b = 20;
+	int c = 0;
+	c = Add(a, b);
+	return 0;
+}
+3.模拟实现strncat函数。
+char *my_strncat(char *dest, const char *src, size_t count)
+{
+	int i=0;
+	int a;
+   char *end=NULL;
+   a=strlen(dest);
+   end=dest+a;
+   for(i=0;i<count;i++)
+   {
+     *end++=*src++;
+   }
+   *end='\0';
+   return dest;
+}
+int main()
+{
+
+	char str[50]={0};
+	char str1[20]={0};
+	char *ret=NULL;
+	int a=0;
+	gets(str);
+	gets(str1);
+	scanf("%d",&a);
+	ret=my_strncat(str,str1,a);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
