@@ -1,0 +1,287 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+my_strlen
+int my_strlen(const char *str)
+{
+	int count=0;
+   assert(str!=NULL);
+   while(*str)
+   {
+     count++;
+	 str++;
+   }
+   return count;
+}
+int main()
+{
+	int ret=0;
+	char str[50]={0};
+	gets(str);
+    ret=my_strlen(str);
+	printf("%d",ret);
+	system("pause");
+	return 0;
+}
+
+
+my_strstr
+char *my_strstr(const char *dest,const char *src)
+{
+	const char *start=NULL;
+    const char *end=NULL;
+    const char *p=NULL;
+	const char *s=NULL;
+   assert(dest!=NULL);
+   assert(src!=NULL);
+   s=src;
+   p=dest;
+   end=src+strlen(src);
+   while(dest!='\0')
+   {
+       start=p;
+	   s=src;
+	   while(*start==*s)
+	   {
+	       start++;
+		   s++;
+		   if(s==end)
+		   {
+		     return p;
+		   }
+	   }
+       p++;
+   
+   }
+   return NULL;
+
+}
+int main()
+{
+    const char *ret=NULL;
+	char str[50]={0};
+	char str1[50]={0};
+	gets(str);
+	gets(str1);
+    ret=my_strstr(str,str1);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+
+my_strcpy
+char *my_strcpy(char *str,const char *str1)
+{
+	char *ret=str;
+   assert(str1!=NULL);
+   while(*str1!='\0')
+   {
+	   *str=*str1;
+	   str++;
+	   str1++;
+   }
+   return ret;
+}
+int main()
+{
+    const char *ret=NULL;
+	char str[50]={0};
+	char str1[50]={0};
+	gets(str);
+	gets(str1);
+    ret=my_strcpy(str,str1);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+
+my_strncpy
+char *my_strncpy(char *str,const char *str1,size_t n)
+{
+	char *ret=str;
+   assert(str1!=NULL);
+   while(n&&*str1!='\0')
+   {
+	   *str=*str1;
+	   str++;
+	   str1++;
+	   n--;
+   }
+   if(n!=0)
+   {
+     while(n)
+	 {
+	   *str++='\0';
+	   n--;
+	 }
+   }
+   return ret;
+}
+int main()
+{
+    const char *ret=NULL;
+	int a=0;
+	char str[50]={0};
+	char str1[50]={0};
+	gets(str);
+	gets(str1);
+    scanf("%d",&a);
+    ret=my_strncpy(str,str1,a);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+
+my_strcat
+char *my_strcat(char *str,const char *str1)
+{
+	char *ret=str;
+	char *end=str+strlen(str);
+    assert(str1!=NULL);
+	while(*str1!='\0')
+	{
+	   *end++=*str1++;
+	}
+	*end='\0';
+	return ret;
+}
+int main()
+{
+    const char *ret=NULL;
+	char str[50]={0};
+	char str1[50]={0};
+	gets(str);
+	gets(str1);
+    ret=my_strcat(str,str1);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+
+my_strncat
+char *my_strncat(char *str,const char *str1,size_t n)
+{
+	char *ret=str;
+	char *end=str+strlen(str);
+	unsigned int i=0;
+    assert(str1!=NULL);
+	for(i=0;i<n;i++)
+	{
+	   *end++=*str1++;
+	}
+	*end='\0';
+	return ret;
+}
+int main()
+{
+    const char *ret=NULL;
+	int n=0;
+	char str[50]={0};
+	char str1[50]={0};
+	gets(str);
+	gets(str1);
+	scanf("%d",&n);
+    ret=my_strncat(str,str1,n);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+
+my_strcmp
+int my_strcmp(const char *dest,const char *src)
+{
+	assert(dest!=NULL);
+	assert(src!=NULL);
+	while(*dest==*src)
+	{
+       if(*dest=='\0')
+	   
+		 return 0;
+	     dest++;
+		 src++;   
+	}
+		return *dest-*src;
+}
+int main()
+{
+    int ret=0;
+	char str[50]={0};
+	char str1[50]={0};
+	gets(str);
+	gets(str1);
+    ret=my_strcmp(str,str1);
+	printf("%d",ret);
+	system("pause");
+	return 0;
+}
+
+
+
+my_strncmp
+int my_strncmp(const char *dest,const char *src,size_t a)
+{
+	assert(dest!=NULL);
+	assert(src!=NULL);
+	while(a&&*dest==*src)
+	{
+       if(*dest=='\0')
+	   
+		 return 0;
+	     dest++;
+		 src++;
+		 a--;
+	}
+		return *dest-*src;
+}
+int main()
+{
+    int ret=0;
+	int n=0;
+	char str[50]={0};
+	char str1[50]={0};
+	gets(str);
+	gets(str1);
+	scanf("%d",&n);
+    ret=my_strncmp(str,str1,n);
+	printf("%d",ret);
+	system("pause");
+	return 0;
+}
+
+
+my_memcpy
+void *my_memcpy( void *dest, const void *src, size_t count )
+{
+  void *ret=dest;
+  while(count)
+  {
+     *(char *)dest=*(char *)src;
+	 dest=(char *)dest+1;
+	 src=(char *)src+1;
+	 count--;
+
+  }
+  return ret;
+
+}
+int main()
+{
+	int i=0;
+	void *ret=NULL;
+	int str[6]={0};
+	int str1[]={1,2,3,4,5,6};
+    ret=my_memcpy((char *)str,(const char *)str1,sizeof(str1));
+	for(i=0;i<6;i++)
+	{
+	   printf("%d",str[i]);
+	}
+   system("pause");
+   return 0;
+}
