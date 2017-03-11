@@ -1,0 +1,116 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdlib.h>
+#include<iostream>
+using namespace std;
+void InsertSort(int arr[], size_t size)
+{
+	for (size_t idx = 1; idx < size; ++idx)
+	{
+		int temp = arr[idx];
+		int end = idx - 1;
+		while (end >= 0 && arr[end]>temp)
+		{
+			arr[end + 1] = arr[end];
+			end--;
+		}
+		arr[end + 1] = temp;
+	}
+}
+void Printf(int arr[],size_t size)
+{
+	for (int idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+
+int main()
+{
+	int arr[] = { 20, 25, 49, 25, 16 };
+	size_t size = sizeof(arr) / sizeof(arr[0]);
+	InsertSort(arr, size);
+	Printf(arr,size);
+	system("pause");
+	return 0;
+}
+void InsertSort(int arr[], size_t size)
+{
+	for (size_t idx = 1; idx < size; ++idx)
+	{
+		int temp = arr[idx];
+		int end = idx - 1;
+		int left = 0;
+		int right = end;
+		
+		用二分查找法找到插入的位置mid
+		while (left<=right)
+		{
+			int mid = left + ((right - left) >> 1);
+			if (temp>=arr[mid])
+			{
+				left = mid + 1;
+			}
+			if (temp<arr[mid])
+			{
+				right = mid - 1;
+			}
+		}
+		for (int pos = end; pos >= left; --pos)
+		{
+			arr[pos + 1] = arr[pos];
+		}
+		arr[left] = temp;
+	}
+}
+void Printf(int arr[], size_t size)
+{
+	for (int idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+int main()
+{
+	int arr[] = { 4,6,1,7,3,9,5,2,8,0};
+	size_t size = sizeof(arr) / sizeof(arr[0]);
+	InsertSort(arr, size);
+	Printf(arr, size);
+	system("pause");
+	return 0;
+}
+哈希排序
+void InsertSort(int arr[], size_t size)
+{
+	int gap = 3;
+	while (gap > 0)
+	{
+		for (size_t idx = gap; idx < size; ++idx)
+		{
+			int temp = arr[idx];
+			int end = idx - gap;
+			while (end >= 0 && arr[end]>temp)
+			{
+				arr[end + gap] = arr[end];
+				end-=gap;
+			}
+			arr[end + gap] = temp;
+		}
+		gap--;
+	}
+}
+void Printf(int arr[], size_t size)
+{
+	for (int idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+int main()
+{
+	int arr[] = { 4, 6, 1, 7, 3, 9, 5, 2, 8, 0 };
+	size_t size = sizeof(arr) / sizeof(arr[0]);
+	InsertSort(arr, size);
+	Printf(arr, size);
+	system("pause");
+	return 0;
+}
