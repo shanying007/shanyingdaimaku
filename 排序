@@ -1,0 +1,225 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdlib.h>
+#include<iostream>
+using namespace std;
+void InsertSort(int arr[], size_t size)
+{
+	for (size_t idx = 1; idx < size; ++idx)
+	{
+		int temp = arr[idx];
+		int end = idx - 1;
+		while (end >= 0 && arr[end]>temp)
+		{
+			arr[end + 1] = arr[end];
+			end--;
+		}
+		arr[end + 1] = temp;
+	}
+}
+void Printf(int arr[],size_t size)
+{
+	for (int idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+
+int main()
+{
+	int arr[] = { 20, 25, 49, 25, 16 };
+	size_t size = sizeof(arr) / sizeof(arr[0]);
+	InsertSort(arr, size);
+	Printf(arr,size);
+	system("pause");
+	return 0;
+}
+void InsertSort(int arr[], size_t size)
+{
+	for (size_t idx = 1; idx < size; ++idx)
+	{
+		int temp = arr[idx];
+		int end = idx - 1;
+		int left = 0;
+		int right = end;
+		
+		//用二分查找法找到插入的位置mid
+		while (left<=right)
+		{
+			int mid = left + ((right - left) >> 1);
+			if (temp>=arr[mid])
+			{
+				left = mid + 1;
+			}
+			if (temp<arr[mid])
+			{
+				right = mid - 1;
+			}
+		}
+		for (int pos = end; pos >= left; --pos)
+		{
+			arr[pos + 1] = arr[pos];
+		}
+		arr[left] = temp;
+	}
+}
+void Printf(int arr[], size_t size)
+{
+	for (int idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+int main()
+{
+	int arr[] = { 4,6,1,7,3,9,5,2,8,0};
+	size_t size = sizeof(arr) / sizeof(arr[0]);
+	InsertSort(arr, size);
+	Printf(arr, size);
+	system("pause");
+	return 0;
+}
+//哈希排序
+void InsertSort(int arr[], size_t size)
+{
+	int gap = 3;
+	while (gap > 0)
+	{
+		for (size_t idx = gap; idx < size; ++idx)
+		{
+			int temp = arr[idx];
+			int end = idx - gap;
+			while (end >= 0 && arr[end]>temp)
+			{
+				a rr[end + gap] = arr[end];
+				end-=gap;
+			}
+			arr[end + gap] = temp;
+		}
+		gap--;
+	}
+}
+void Printf(int arr[], size_t size)
+{
+	for (int idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+int main()
+{
+	int arr[] = { 4, 6, 1, 7, 3, 9, 5, 2, 8, 0 };
+	size_t size = sizeof(arr) / sizeof(arr[0]);
+	InsertSort(arr, size);
+	Printf(arr, size);
+	system("pause");
+	return 0;
+}
+//堆排序
+void HeapAdjust(int arr[], int root, size_t size)
+{
+	size_t child = root * 2 + 1;
+	int parent = root;
+	while (child<size)
+	{
+		if (child + 1 && arr[child] < arr[child + 1])
+		{
+			child = child + 1;
+		}
+		if (arr[parent] < arr[child])
+		{
+			std::swap(arr[parent], arr[child]);
+			parent = child;
+			child = parent * 2 + 1;
+		}
+		else
+			break;
+	}
+}
+void HeapSort(int arr[], size_t size)
+{
+	//1、创建堆
+	for (int idx = (size - 2) / 2; idx >= 0; --idx)
+	{
+		HeapAdjust(arr, idx, size);
+	}
+	int index = size - 1;
+	while (index > 0)
+	{
+		std::swap(arr[0], arr[index]);
+		index--;
+		HeapAdjust(arr, 0, index);
+	}
+}
+void Printf(int arr[], size_t size)
+{
+	for (size_t idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+int main()
+{
+	int arr[] = { 4, 2, 6, 9, 3, 1, 0, 7, 8, 5 };
+	size_t size = sizeof(arr) / sizeof(arr[0]);
+	HeapSort(arr, size);
+	Printf(arr,size);
+	system("pause");
+	return 0;
+}
+///快速排序
+int Partion(int arr[],int left,int right)
+{
+	int begin = left;
+	int end = right;
+	int key = arr[right];
+	while (begin < end)
+	{
+		//从前往后找比Key值大的
+		while (begin < end && arr[begin] < key)
+		{
+			begin++;
+		}
+		从后往前找比Key值小的
+		while (begin < end && arr[end] >= key)
+		{
+			end--;
+		}
+		if (begin < end)
+		{
+			std::swap(arr[begin], arr[end]);
+			begin++;
+			end--;
+		}		
+	}
+	//处理begin==end  begin>end的情况
+	if (begin != right&&arr[begin]>arr[right])
+	{
+		std::swap(arr[begin], arr[right]);
+	}
+	return begin;
+}
+void QuickSort(int arr[],int left,int right)
+{
+	if (left < right)
+	{
+		int div = Partion(arr, left, right);
+		QuickSort(arr, left, div - 1);
+		QuickSort(arr ,div + 1,right);
+	}
+}
+void Printf(int arr[], size_t size)
+{
+	for (size_t idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+int main()
+{
+	int arr[] = { 4,25,16,25,32,19,56,3,7};
+	int size = sizeof(arr) / sizeof(arr[0]);
+	QuickSort(arr, 0, size - 1);
+	Printf(arr, size);
+	system("pause");
+	return 0;
+}
