@@ -1,0 +1,363 @@
+#include<iostream>
+using namespace std;
+#include<queue>
+#include<stack>
+template<class T>
+struct BinaryTreeNode
+{
+	BinaryTreeNode(const T& data)
+	:_data(data)
+	, _LChild(NULL)
+	, _RChild(NULL)
+	{}
+	T _data;
+	BinaryTreeNode<T>* _LChild;
+	BinaryTreeNode<T>* _RChild;
+};
+template<class T>
+class BinaryTree
+{
+public:
+	BinaryTree()
+		:_pRoot(NULL)
+	{}
+	BinaryTree(const T array[], size_t size)
+		:_pRoot(NULL)
+	{
+		size_t index = 0;
+		_CreateBinaryTree(_pRoot ,array, size ,index);
+	}
+	BinaryTree(BinaryTree<T>& t)
+	{
+		_pRoot = _CopyCreateBinaryTree(t._pRoot);
+	}
+	BinaryTree<T>& operator=(BinaryTree<T>& t)
+	{
+		if (this != &t)
+		{
+			this->~BinaryTree();
+			_pRoot = _CopyCreateBinaryTree(t._pRoot);
+		}
+		return *this;
+	}
+	~BinaryTree()
+	{
+		_DestoryBinaryTree(_pRoot);
+	
+	}
+	void PreOrder()
+	{
+		_PreOrder(_pRoot);
+	}
+	void InOrder()
+	{
+		_InOrder(_pRoot);
+	}
+	void PostOrder()
+	{
+		_PostOrder(_pRoot);
+	}
+	void LevelOrder()
+	{
+		_LevelOrder(_pRoot);
+	}
+	void PreOrder_nor()
+	{
+		_PreOrder_nor(_pRoot);
+	}
+	void InOrder_nor()
+	{
+		_InOrder_nor(_pRoot);
+	}
+	void PostOrder_nor()
+	{
+		_PostOrder_nor(_pRoot);
+	}
+	BinaryTreeNode<T>* Find(const T& data)
+	{
+		return _Find(_pRoot, data);
+		
+	}
+	BinaryTreeNode<T>* Getparent(BinaryTreeNode<T>* pCur)
+	{
+		return _Getparent(_pRoot, pCur);
+	}
+	size_t Height()
+	{
+		return _Height(_pRoot);
+	}
+	size_t Size()
+	{
+		return _Size(_pRoot);
+	}
+private:
+	
+	void _CreateBinaryTree(BinaryTreeNode<T>*& _pRoot, const T array[], size_t size, size_t& index)
+	{
+		if (index < size&&array[index] != '#')
+		{
+			_pRoot = new BinaryTreeNode<T>(array[index]);
+			_CreateBinaryTree(_pRoot->_LChild, array, size, ++index);
+			_CreateBinaryTree(_pRoot->_RChild, array, size, ++index);
+		}
+	}
+	BinaryTreeNode<T>* _CopyCreateBinaryTree(BinaryTreeNode<T>*& pRoot)
+	{
+		if (pRoot)
+		{
+			BinaryTreeNode<T>* pNewRoot = new BinaryTreeNode<T>(pRoot->_data);
+			pNewRoot->_LChild = _CopyCreateBinaryTree(pRoot->_LChild);
+			pNewRoot->_RChild = _CopyCreateBinaryTree(pRoot->_RChild);
+			return pNewRoot;
+		}
+		return NULL;
+	}
+	void _DestoryBinaryTree(BinaryTreeNode<T>*& _pRoot)
+	{
+		if (_pRoot)
+		{
+			_DestoryBinaryTree(_pRoot->_LChild);
+			_DestoryBinaryTree(_pRoot->_RChild);
+			delete[] _pRoot;
+			_pRoot = NULL;
+		}
+	}
+	void _PreOrder(BinaryTreeNode<T>*& _pRoot)
+	{
+		BinaryTreeNode<T>* temp = _pRoot;
+		if (NULL == temp)
+		{
+			return;
+		}
+		cout << temp->_data << " ";
+		_PreOrder(temp->_LChild);
+		_PreOrder(temp->_RChild);
+	}
+	void _InOrder(BinaryTreeNode<T>*& _pRoot)
+	{
+		BinaryTreeNode<T>* temp = _pRoot;
+		if (NULL == temp)
+		{
+			return;
+		}
+		_InOrder(temp->_LChild);
+		cout << temp->_data << " ";
+		_InOrder(temp->_RChild);
+	}
+	void _PostOrder(BinaryTreeNode<T>*& _pRoot)
+	{
+		BinaryTreeNode<T>* temp = _pRoot;
+		if (NULL == temp)
+		{
+			return;
+		}
+		_PostOrder(temp->_LChild);
+		_PostOrder(temp->_RChild);
+		cout << temp->_data << " ";
+	}
+	void _LevelOrder(BinaryTreeNode<T>*& _pRoot)
+	{
+		if (_pRoot == NULL)
+			return;
+		BinaryTreeNode<T>* temp = _pRoot;
+		queue<BinaryTreeNode<T>*> q;
+		q.push(temp);
+		while (!q.empty())
+		{
+			BinaryTreeNode<T>* pCur = q.front();
+			cout << pCur->_data << " ";
+			if (pCur->_LChild)
+			{
+				q.push(pCur->_LChild);
+			}
+			if (pCur->_RChild)
+			{
+				q.push(pCur->_RChild);
+			}
+			q.pop();
+		}
+	}
+	void _PreOrder_nor(BinaryTreeNode<T>* _pRoot)
+	{
+		if (_pRoot == NULL)
+		{
+			return;
+		}
+		stack<BinaryTreeNode<T>*> s;
+		s.push(_pRoot);
+		BinaryTreeNode<T>* pCur = NULL;
+		while (!s.empty())
+		{
+			pCur = s.top();
+			cout << pCur->_data << " ";
+			s.pop();
+			if (pCur->_RChild)
+			{
+				s.push(pCur->_RChild);
+			}
+			if (pCur->_LChild)
+			{
+				s.push(pCur->_LChild);
+			}
+		}
+	}
+	void _InOrder_nor(BinaryTreeNode<T>* _pRoot)
+	{
+		if (_pRoot == NULL)
+		{
+			return;
+		}
+		stack<BinaryTreeNode<T>*> s;
+		BinaryTreeNode<T>* pCur = _pRoot;
+		while (pCur != NULL||!s.empty())
+		{
+			while (pCur)
+			{
+				s.push(pCur);
+				pCur = pCur->_LChild;
+			}
+			BinaryTreeNode<T>* pTop = s.top();
+			cout << pTop->_data << " ";
+			s.pop();
+			pCur = pTop->_RChild;
+		}
+	}
+	void _PostOrder_nor(BinaryTreeNode<T>* _pRoot)
+	{
+		if (_pRoot == NULL)
+		{
+			return;
+		}
+		stack<BinaryTreeNode<T>> s;
+		BinaryTreeNode<T>* prev = NULL;
+		BinaryTreeNode<T>* pCur = _pRoot;
+		while (pCur!=NULL||!s.empty())
+		{
+			while (pCur)
+			{
+				s.push(pCur);
+				pCur = pCur->_LChild;
+			}
+			BinaryTreeNode<T>* pTop = s.top();
+			if (pTop->_RChild == NULL||pTop->_RChild == prev)
+			{
+				cout << pTop->_data << " ";
+				prev = pTop;
+				s.pop();
+			}
+			else
+			{
+				pCur = pTop->_RChild;
+			}
+		}
+	}
+	BinaryTreeNode<T>* _Find(BinaryTreeNode<T>* pRoot, const T& data)
+	{
+		BinaryTreeNode<T>* ret = NULL;
+		if (pRoot == NULL)
+		{
+			return NULL;
+		}
+		if (pRoot->_data == data)
+		{
+			ret = pRoot;
+		}
+		else
+		{
+			ret = _Find(pRoot->_LChild, data);
+			if (ret == NULL)
+			{
+				ret = _Find(pRoot->_RChild, data);
+			}
+		}
+		return ret;
+	}
+	BinaryTreeNode<T>* _Getparent(BinaryTreeNode<T>* pRoot, BinaryTreeNode<T>* pCur)
+	{
+		BinaryTreeNode<T>* ret = NULL;
+		if (pRoot == NULL||NULL==pCur)
+			return NULL;
+		if (pCur == pRoot)
+		{
+			return NULL;
+		}
+		if (pRoot->_LChild == pCur||pRoot->_RChild == pCur)
+		{
+			return pRoot;
+		}
+		return _Getparent(pRoot->_LChild, pCur);
+		if (pRoot->_LChild==NULL)
+			return _Getparent(pRoot->_RChild, pCur);
+	}
+	size_t _Height(BinaryTreeNode<T>* pRoot)
+	{
+		if (pRoot == NULL)
+		{
+			return 0;
+		}
+		if (pRoot->_LChild == NULL&&pRoot->_RChild == NULL)
+		{
+			return 1;
+		}
+		size_t HLeft = 0;
+		size_t HRight = 0;
+		HLeft = _Height(pRoot->_LChild);
+		HRight = _Height(pRoot->_RChild);
+		return (HLeft > HRight) ? (HLeft+1) : (HRight+1);
+	}
+	size_t _Size(BinaryTreeNode<T>* pRoot)
+	{
+		size_t ret = 0;
+		if (pRoot == NULL)
+		{
+			return ret;
+		}
+		ret++;
+		ret += _Size(pRoot->_LChild);
+		ret += _Size(pRoot->_RChild);
+		return ret;
+
+	}
+private:
+	BinaryTreeNode<T>* _pRoot;
+};
+void FunTest()
+{
+	char* array = "abd###ce##fgh";
+	int size = strlen(array);
+	BinaryTree<char> t(array, size);
+	BinaryTree<char> t1(t);
+	BinaryTree<char> t2;
+	t2 = t;
+	cout << "PreOrder:" << endl;
+	t.PreOrder();
+	cout << endl;
+	cout << "InOrder:" << endl;
+	t.InOrder();
+	cout << endl;
+	cout << "PostOrder:" << endl;
+	t.PostOrder();
+	cout << endl;
+	cout << "LevelOrder:" << endl;
+	t.LevelOrder();
+	cout << endl;
+	cout << "PreOrder_nor:" << endl;
+	t.PreOrder_nor();
+	cout << endl;
+	cout << "InOrder_nor:" << endl;
+	t.InOrder_nor();
+	cout << endl;
+	cout << "PostOrder_nor:" << endl;
+	t.PreOrder_nor();
+	cout << endl;
+	cout << t.Find('e')->_data << endl;
+	cout << t.Getparent(t.Find('d'))->_data << endl;
+	cout << t.Height() << endl;
+	cout << t.Size() << endl;
+}
+int main()
+{
+	FunTest();
+	system("pause");
+	return 0;
+}
