@@ -1,0 +1,143 @@
+#include<iostream>
+using namespace std; 
+template <typename T>
+struct Node
+{
+public:
+	Node(const T&data)
+		:_Data(data)
+		, _pNext(NULL)
+		, _pPre(NULL)
+	{}
+public:
+	T _Data;
+	Node<T>* _pNext;
+	Node<T>* _pPre;
+};
+template <typename T>
+class List
+{
+public:
+typedef Node<T> Node;
+public:
+	List()
+		, _pHead(NULL)
+		, _pTail(NULL)
+		, _size(0)
+	{}
+	List(size_t n, const T& value = T())
+		, _pHead(NULL)
+		, _pTail(NULL)
+		, _size(0)
+	{
+		for (size_t idx = 0; idx < n; ++idx)
+		{
+			PushBack(value);
+		}
+	}
+	List(const List& L)
+		,_pHead(NULL)
+		, _pTail(NULL)
+		, _size(0)
+	{
+		Node* pCur = L._pHead;
+		while (pCur)
+		{
+			PushBack(pCur->_Data);
+			pCur = pCur->_pNext;
+		}
+	}
+	List<T>& operator=(const List<T>& L)
+	{
+		if (this != &L)
+		{
+			Destroy();
+				Node* pCur = L.pHead;
+				while (pCur)
+				{
+					PushBack(pCur->_Data);
+					pCur = pCur->_pNext;
+				}
+		}
+		return *this;
+	}
+	~List()
+	{
+		Destroy()
+	}
+	void PushBack(const T& Data)
+	{
+		Node* pNewNode = BuyNode(data);
+		if (_size == 0)
+		{
+			_pHead = pNewNode;
+			_pTail = pNewNode;
+		}
+		else
+		{
+			_pTail->_pNext = pNewNode;
+			_pHead = pNewNode->_pPre;
+			_pTail = pNewNode;
+		}
+		++size;
+	}
+	void PopBack()
+	{
+		if (size == 0)
+		{
+			return;
+		}
+		else if (_pHead == _pTail)
+		{
+			delete[] _pHead;
+			_pHead = NULL;
+			_pTail = NULL;
+		}
+		else
+		{
+			_pTail = _pTail->_pPre;
+			delete _pTail->_pNext;
+			_pTail->_pNext = NULL;
+		}
+		--size;
+	}
+	Node<T> BuyNode(const T& Data)
+	{
+		return new Node(Data);
+	}
+private:
+	void Destroy()
+	{
+		Node* pCur = _pHead;
+		Node* pCurNext = _pHead->_pNext;
+		while (pCur)
+		{
+			delete pCur;
+			pCur = pCurNext;
+			pCurNext = pCurNext->_pNext;
+		}
+	}
+
+private:
+	T _Data;
+	Node* _pHead;
+	Node* _pTail;
+	size_t _size;
+};
+void FunTest()
+{
+	List<int> L(5);
+	L.PushBack(1);
+	L.PushBack(2);
+	L.PushBack(3);
+	L.PushBack(4);
+	L.PushBack(5);
+
+
+}
+int main()
+{
+	FunTest();
+	system("pause");
+	return 0;
+}
