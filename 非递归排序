@@ -1,0 +1,276 @@
+//快速排序
+//int Partion(int arr[],int left,int right)
+//{
+//	int begin = left;
+//	int end = right;
+//	int key = arr[right];
+//	while (begin < end)
+//	{
+//		//从前往后找比Key值大的
+//		while (begin < end && arr[begin] < key)
+//		{
+//			begin++;
+//		}
+//		//从后往前找比Key值小的
+//		while (begin < end && arr[end] >= key)
+//		{
+//			end--;
+//		}
+//		if (begin < end)
+//		{
+//			std::swap(arr[begin], arr[end]);
+//			begin++;
+//			end--;
+//		}		
+//	}
+//	//处理begin==end  begin>end的情况
+//	if (begin != right&&arr[begin]>arr[right])
+//	{
+//		std::swap(arr[begin], arr[right]);
+//
+//	}
+//	return begin;
+//}
+//int GetkeyIndex(int* arr, int left, int right)
+//{
+//	int mid = left + ((right - left) >> 1);
+//	if (arr[left] < arr[right])
+//	{
+//		if (arr[mid] < arr[left])
+//			return left;
+//		else if (arr[mid]>arr[right])
+//			return right;
+//		else
+//			return mid;
+//	}
+//	else
+//	{
+//		if (arr[mid] < arr[right])
+//			return right;
+//		else if (arr[mid]>arr[left])
+//			return left;
+//		else
+//			return mid;
+//	}
+//}
+//int Partion2(int arr[], int left, int right)
+//{
+//	int begin = left;
+//	int end = right;
+//	int keyIndex = GetkeyIndex(arr,left,right);
+//	if(keyIndex!=right)
+//	std::swap(arr[keyIndex], arr[right]);
+//	int key=arr[right];
+//	while (begin < end)
+//	{
+//		while (begin < end&&arr[begin] <= key)
+//			begin++;
+//		if (begin < end)
+//		{
+//			arr[end] = arr[begin];
+//			end--;
+//		}
+//		while (begin<end&&arr[end]>key)
+//			end--;
+//		if (begin < end)
+//		{
+//			arr[begin] = arr[end];
+//			begin++;
+//		}
+//	}
+//	arr[begin] = key;
+//	return begin;
+//}
+//void QuickSort(int arr[],int left,int right)
+//{
+//	if (left < right)
+//	{
+//		int div = Partion2(arr, left, right);
+//		QuickSort(arr, left, div - 1);
+//		QuickSort(arr ,div + 1,right);
+//	}
+//}
+//void Printf(int arr[], size_t size)
+//{
+//	for (size_t idx = 0; idx < size; ++idx)
+//	{
+//		printf("%d ", arr[idx]);
+//	}
+//}
+//int main()
+//{
+//	int arr[] = { 2,0,1,5,7,4,9,8,6,3};
+//	int size = sizeof(arr) / sizeof(arr[0]);
+//	QuickSort(arr, 0, size - 1);
+//	Printf(arr, size);
+//	system("pause");
+//	return 0;
+//}
+//int Partion(int arr[], int left, int right)
+//{
+//	int begin = left;
+//	int end = right;
+//	int key = arr[right];
+//	while (begin < end)
+//	{
+//		//从前往后找比Key值大的
+//		while (begin < end && arr[begin] < key)
+//		{
+//			begin++;
+//		}
+//		//从后往前找比Key值小的
+//		while (begin < end && arr[end] >= key)
+//		{
+//			end--;
+//		}
+//		if (begin < end)
+//		{
+//			std::swap(arr[begin], arr[end]);
+//			begin++;
+//			end--;
+//		}
+//	}
+//	//处理begin==end  begin>end的情况
+//	if (begin != right&&arr[begin]>arr[right])
+//	{
+//		std::swap(arr[begin], arr[right]);
+//
+//	}
+//	return begin;
+//}
+//int GetkeyIndex(int* arr, int left, int right)
+//{
+//	int mid = left + ((right - left) >> 1);
+//	if (arr[left] < arr[right])
+//	{
+//		if (arr[mid] < arr[left])
+//			return left;
+//		else if (arr[mid]>arr[right])
+//			return right;
+//		else
+//			return mid;
+//	}
+//	else
+//	{
+//		if (arr[mid] < arr[right])
+//			return right;
+//		else if (arr[mid]>arr[left])
+//			return left;
+//		else
+//			return mid;
+//	}
+//}
+//int Partion2(int arr[], int left, int right)
+//{
+//	int begin = left;
+//	int end = right;
+//	int keyIndex = GetkeyIndex(arr, left, right);
+//	if (keyIndex != right)
+//		std::swap(arr[keyIndex], arr[right]);
+//	int key = arr[right];
+//	while (begin < end)
+//	{
+//		while (begin < end&&arr[begin] <= key)
+//			begin++;
+//		if (begin < end)
+//		{
+//			arr[end] = arr[begin];
+//			end--;
+//		}
+//		while (begin<end&&arr[end]>key)
+//			end--;
+//		if (begin < end)
+//		{
+//			arr[begin] = arr[end];
+//			begin++;
+//		}
+//	}
+//	arr[begin] = key;
+//	return begin;
+//}
+////非递归
+//void QuickSortNor(int arr[], int left, int right)
+//{
+//	stack<int> s;
+//	s.push(right);
+//	s.push(left);
+//	while (!s.empty())
+//	{
+//		left = s.top();
+//		s.pop();
+//		right = s.top();
+//		s.pop();
+//		int div = Partion2(arr, left, right);
+//		if (left < right)
+//		{
+//			s.push(right);
+//			s.push(div + 1);
+//			s.push(div - 1);
+//			s.push(left);
+//		}
+//	}
+//}
+
+//void Printf(int arr[], size_t size)
+//{
+//	for (size_t idx = 0; idx < size; ++idx)
+//	{
+//		printf("%d ", arr[idx]);
+//	}
+//}
+//int main()
+//{
+//	int arr[] = { 2, 0, 1, 5, 7, 4, 9, 8, 6, 3 };
+//	int size = sizeof(arr) / sizeof(arr[0]);
+//	QuickSortNor(arr, 0, size-1);
+//	Printf(arr, size);
+//	system("pause");
+//	return 0;
+//}
+//鸽巢排序
+void CountSort(int arr[], int size)
+{
+	int maxValue = arr[0];
+	int minValue = arr[0];
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (arr[i]>maxValue)
+			maxValue = arr[i];
+		if (arr[i] < minValue)
+			minValue = arr[i];
+	}
+	int range = maxValue - minValue + 1;
+	int* count = new int[range];
+	memset(count, 0, sizeof((int))*range);
+		//统计相同元素个数
+	for (size_t idx = 0; idx < size; ++size)
+	{
+		count[arr[idx] - minValue]++;
+		//重新排序
+		for (size_t i = 0; i < range; ++i)
+		{
+			for (int j = 0; j < count[i]; ++j)
+			{
+				arr[idx++] = minValue + i;
+			}
+		}
+		delete[] count;
+	}
+}
+void Printf(int arr[], size_t size)
+{
+	for (size_t idx = 0; idx < size; ++idx)
+	{
+		printf("%d ", arr[idx]);
+	}
+}
+int main()
+{
+	int arr[] = { 2, 0, 1, 5, 7, 4, 9, 8, 6, 3 };
+	int size = sizeof(arr) / sizeof(arr[0]);
+	//QuickSortNor(arr, 0, size - 1);
+	CountSort(arr, size);
+	Printf(arr, size);
+	system("pause");
+	return 0;
+}
