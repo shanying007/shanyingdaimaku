@@ -1,0 +1,242 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+using namespace std;
+class String
+{
+public:
+	String(const char* pStr = "")
+	{
+		if (NULL == pStr)
+		{
+			_pStr = new char[1];
+			*_pStr = '\0';
+		}
+		else
+		{
+			_pStr = new char[strlen(pStr) + 1];
+			strcpy(_pStr, pStr);
+		}
+	}
+	~String()
+	{
+		if (NULL != _pStr)
+		{
+			delete[] _pStr;
+			_pStr = NULL;
+		}
+	}
+	String(const String &s)
+		:_pStr(new char[strlen(s._pStr) + 1])
+	{
+		strcpy(_pStr, s._pStr);
+	}
+	String& operator=(const String &s)
+	{
+		if (this != &s)
+		{
+			char*pTemp = new char[strlen(s._pStr) + 1];
+			strcpy(pTemp, s._pStr);
+			delete[] _pStr;
+			_pStr = pTemp;
+		}
+		return *this;
+
+	}
+private:
+	char* _pStr;
+};
+template<typename T>
+class Vector
+{
+public:
+	Vector()
+		:_pData(new T[3])
+		, _size(0)
+		, _capacity(3)
+	{}
+
+	Vector(T* arr, int size)
+		:_pData(new T[size])
+		, _size(size)
+		, _capacity(size)
+	{
+		memcpy(_pData, arr, _size*sizeof(T));
+	}
+	Vector(Vector<T> &v)
+		:_pData(new T[v._capacity])
+		,_size(v._size)
+		, _capacity(v._capacity)
+	{
+		for (int i = 0; i < v._size; i++)
+		{
+			_pData[i] = v._pData[i];
+		}
+
+	}
+	Vector<T>& operator=(const Vector<T> &v)
+	{
+		if (this != &v)
+		{
+			T* pTemp = new T[v.capacity];
+			if (CheckPODType(typeid(T).name()))
+			{
+				memcpy(pTemp, _pData, _size*sizeof(T));
+			}
+			else
+			{
+				for (int i = 0; i < v._size; i++)
+				{
+					pTemp[i] = v._pData[i];
+				}
+			}
+			deleta[] _pData;
+			_pData = pTemp;
+			_size = v._size;
+			_capacity = v._capacity;
+		}
+	}
+	~Vector()
+	{
+		if (NULL == _pData)
+		{
+			delete[] _pData;
+			_pData = NULL;
+		}
+	}
+	void PushBack(const T &data)
+	{
+		_checkCapacity();
+		_pData[_size++] = data;
+	
+	}
+	void PopBack()
+	{
+		if (NULL != _pData)
+		{
+			--_size;
+		}
+	}
+	void Erase(size_t pos)
+	{
+		if (pos > 0 && pos <= _size)
+		{
+			for (int i = pos; i <( _size+1); i++)
+			{
+				_pData[i] = _pData[i + 1];
+			}
+			_size--;
+		}
+	}
+	void Insert(size_t pos, const T& data)
+	{
+		_size++;
+		_checkCapacity();
+		if (pos>0 && pos < _size)
+		{
+			for (int i = _size; i >= pos; i--)
+			{
+				_pData[i] = _pData[i - 1];
+			}
+			_pData[pos] = data;
+		}
+		
+	}
+	T& Front()
+	{
+		return _pData[0];
+	}
+	const T& Front()const
+	{
+		return _pData[0];
+	}
+	T& Back()
+	{
+		return _pData[_size];
+	}
+	const T& Back()const
+	{
+		return _pData[_size];
+	}
+	size_t Size()const
+	{
+		return _size;
+	}
+	size_t Capacity()const
+	{
+		return _capacity;
+	}
+	bool Empty()const
+	{
+		if (0 == _size)
+		{
+			return true;
+		}
+		return false;
+	}
+	void Clear()
+	{
+		if (_size != 0)
+		{
+			_size = 0;
+		}
+	}
+	void Resize()
+	{
+		_size = 0;
+	}
+	T& operator[](size_t pos)
+	{
+		return _pData[pos];
+	}
+private:
+	bool CheckPODType(const char* pTypeName)
+	{
+		char* TypeName[] = { "int", "double", "char", "long", "flout" };
+		for (int i = 0; i < sizeof(TypeName) / sizeof(TypeName[0]); ++i)
+		{
+			if (strcmp(pTypeName, TypeName[i]) == 0)
+			{
+				return ture;
+			}
+			return false;
+		}
+	
+	}
+	void _checkCapacity()
+	{
+		if (_size >= _capacity)
+		{
+			T* pTemp = new T[_capacity * 2];
+			memcpy(pTemp, _pData, _size*sizeof(T));
+			delete[] _pData;
+			_pData = pTemp;
+			_capacity *= 2;
+		}
+	} 
+private:
+	T* _pData;
+	size_t _size;
+	size_t _capacity;
+};
+void FunTest()
+{
+	Vector<int> v;
+	v.PushBack(1);
+	v.PushBack(2);
+	v.PushBack(3);
+	v.PushBack(4); 
+	v.Erase(2);
+	v.Insert(2, 2);
+	/*Vector<String> v1;
+	v1.PushBack("1111");
+	v1.PushBack("2222");
+	v1.PushBack("3333");
+	v1.PushBack("4444");
+	v1.PushBack("5555");*/
+}
+int main()
+{
+	FunTest();
+	system("pause");
+	return 0;
+}
