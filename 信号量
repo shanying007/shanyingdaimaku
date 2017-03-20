@@ -1,0 +1,152 @@
+ Comm.h：
+#ifndef _COMM_H_
+#define _COMM_H_
+#define PATHNAME "."
+#define PROJ_ID 0x666
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<sys/ipc.h>
+#include<sys/sem.h>
+typedef union semun {
+	int val;                 /* Value for SETVAL */
+	struct semid_ds *buf;    /* Buffer for IPC_STAT, IPC_SET */
+    unsigned short  *array;  /* Array for GETALL, SETALL */
+    struct seminfo  *__buf;  /* Buffer for IPC_INFO */
+	void *_pad;   
+}mysemun;
+int create_sem(int nums);
+int destroy_sems(int semid);
+int init_sem(int semid,int which,int _val);
+int P(int semid);
+int V(int semid);
+int get_sems();
+int comm_sems(int nums,int flags);
+int comm_semop(int semid,int which,int op);
+#endif
+
+
+
+Comm.c：
+#include"comm.h"
+int comm_sems(int nums,int flags)
+{
+	key_t k=ftok(PATHNAME,PROJ_ID);
+	if(k<0)
+	{
+		perror("fork");
+		return -1;
+	}
+	int semid=semget(k,nums,flags);
+	if(semid<0)
+	{
+		perror("semget");
+		return -1;
+	}
+	return semid;
+}
+//创建
+int create_sems(int nums)
+{
+	return comm_sems(nums,IPC_CREAT | IPC_EXCL | 0666);
+}
+//获取
+int get_sems()
+{
+	return comm_sems(0,IPC_CREAT);
+}
+//销毁
+int destroy_sems(int semid)
+{
+    if(semctl(semid,0,IPC_RMID)<0)
+	{
+		perror("semctl");
+		return -1;
+	}
+	return 0;
+}
+//操作
+int comm_semop(int semid,int which ,int _op)
+{
+	struct sembuf mysembuf;
+	mysembuf.sem_num=which;
+	mysembuf.sem_op=_op;
+	mysembuf.sem_flg=0;
+	if(semop(semid,&mysembuf,1)<0)
+	{
+		perror("semop");
+		return -1;
+	}
+	return 0;
+}
+//初始化
+int init_sem(int semid,int which,int _val)
+{
+    mysemun un;
+	un.val=_val;
+	if(semctl(semid,which,SETVAL,un)<0)
+	{
+		perror("semctl");
+		return -1;
+	}
+	return 0;
+}
+int P(int semid)
+{
+	return comm_semop(semid,0,-1);
+}
+int V(int semid)
+{
+	return comm_semop(semid,0,1);
+}
+
+
+Sem.c：
+#include"comm.h"
+int main()
+{
+	int semid=create_sems(1);
+	init_sem(semid,0,1);
+    pid_t id=fork();
+	if(id<0)
+	{
+		perror("fork");
+		return -1;
+	}
+	if(id == 0)
+	{
+		//child
+		while(1)
+		{
+		    int child_id=get_sems();
+			//P(child_id);
+			printf("A");
+            usleep(12345);
+			fflush(stdout);
+            printf("A");
+			usleep(22345);
+			fflush(stdout);
+			//V(child_id);
+		}
+		exit(1);
+	}
+	else
+	{
+		//father
+		while(1)
+		{
+			//P(semid);
+			printf("B");
+            usleep(12345);
+			fflush(stdout);
+            printf("B");
+			usleep(22345);
+			fflush(stdout);
+			//V(semid);
+		}
+		wait(NULL);
+		destory_sems(semid);
+	}
+	return 0;
+}
