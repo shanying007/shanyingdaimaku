@@ -1,0 +1,112 @@
+#include<iostream>
+using namespace std;
+#include<assert.h>
+template<class T, size_t M = 15>
+class DoubleStack_By_OneArray_ToMid
+{
+public:
+	DoubleStack_By_OneArray_ToMid()
+		:_top1(0)
+		, _top2(M - 1) //设置栈的起始位置  
+	{}
+	void push(const T& data, size_t which)  //输入0则放在_top1   其他的 则是放在_top2  
+	{
+		if (Isfull())
+		{
+			cout << "It is full" << endl;
+			return;
+		}
+		if (which == 0)
+		{
+			arr[_top1] = data;
+			_top1++;
+		}
+		else
+		{
+			arr[_top2] = data;
+			_top2--;
+		}
+	}
+	void pop(size_t which)
+	{
+		assert(!empty(which));
+		if (which == 0)
+		{
+			if (Isfull())
+			{
+				_top1 -= 2;
+			}
+			else
+			{
+				_top1--;
+			}
+		}
+		else
+		{
+			if (Isfull())
+			{
+				_top2 += 2;
+			}
+			else
+			{
+				_top2++;
+			}
+		}
+	}
+	T& top(size_t which)
+	{  
+		assert(!empty(which));
+		if (which == 0)
+		{
+			return _top1;
+		}
+		else
+		{
+			return _top2;
+		}
+	}
+	bool empty(size_t which)
+	{
+		return which == 0 ? _top1 == 0 : _top2 == M - 1;
+	}
+	T size(size_t which)
+	{
+		return which == 0 ? _top1 : M - _top2;
+	}
+	~DoubleStack_By_OneArray_ToMid()
+	{
+		if (arr[M] != NULL)
+		{
+			delete[] arr;
+		}
+	}
+private:
+	bool Isfull()   
+	{
+		
+		if (_top1 == _top2)
+			return true;
+		else
+			return false;
+	}
+private:
+	T arr[M];
+	int _top1;
+	int _top2;
+};
+int main()
+{
+	DoubleStack_By_OneArray_ToMid<int> S;
+	S.push(1, 0);
+	S.push(2, 0);
+	S.push(3, 0);
+	S.push(4, 0);
+	S.push(5, 1);
+	S.push(6, 1);
+	S.pop(0);
+	cout<<S.size(0)<<endl;
+	cout<<S.empty(1)<<endl;
+	cout<<S.top(0)<<endl;
+	system("pause");
+	return 0;
+}
