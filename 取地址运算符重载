@@ -1,0 +1,28 @@
+#include<iostream>
+using namespace std;
+class Test
+{
+public:
+	//非const类型
+	//Test* operator&()       //重载时判断函数是否有参数，看操作数有几个，如果操作数只有一个则无参数
+	//{
+	//	return this;
+	//}
+	//const类型
+	const Test* operator&()const
+	{
+		return this;
+    }
+};
+void FunTest()
+{
+	Test d;
+	cout << &d << endl;
+
+}
+int main()
+{
+	FunTest();
+	system("pause");
+	return 0;
+}
