@@ -1,0 +1,93 @@
+#include<iostream>
+using namespace std;
+enum Info
+{
+	LINK,
+	THREAD,
+};
+template<class T>
+struct BinaryTreeThdNode
+{
+	BinaryTreeThdNode(const T& data)
+	:_pLeft(NULL)
+	, _pRight(NULL)
+	, _data(data)
+	, _LeftThread(LINK)
+	, _RightThread(LINK)
+	{}
+private:
+	T _data;
+	BinaryTreeThdNode<T>* _pLeft;
+	BinaryTreeThdNode<T>* _pRight;
+	Info _LeftThread;
+	Info _RightThread;
+};
+template<class T>
+class BinaryTreeThd
+{
+public:
+	BinaryTreeThd()
+		:_pRoot(NULL)
+	{}
+	BinaryTreeThd(const T arr[], size_t size)
+	{
+		size_t index = 0;
+		_CreateTree(_pRoot, arr, size, index);
+	}
+	void PreOrderThd()
+	{
+		BinaryTreeThdNode<T>* prev = NULL;
+		_PreOrderThd(_pRoot, prev);
+	}
+private:
+	void _CreateTree(BinaryTreeThdNode<T>* &pRoot, const T arr[], size_t size, size_t &index)
+	{
+		if (index < size && '#' != arr[index])
+		{
+			pRoot = new BinaryTreeThdNode<T>(arr[index]);
+			_CreateTree(pRoot->_pLeft, arr, size, ++index);
+			_CreateTree(pRoot->_pRight, arr, size, ++index);
+		}
+	}
+	void _PreOrderThd(BinaryTreeThdNode<T>* pRoot, BinaryTreeThdNode<T>* &prev)
+	{
+		if (pRoot)
+		{
+			if (NULL == pRoot->_pLeft)
+			{
+				pRoot->_LeftThread = THREAD;
+				pRoot->_pLeft = prev;
+			}
+			if (pRoot->_pRight == NULL&&prev)
+			{
+				prev->_pRight = pRoot;
+				prev->_RightThread = THREAD;
+			}
+			prev = pRoot;
+			if (LINK == pRoot->_pLeft)
+			{
+				_PreOrderThd(pRoot->_pLeft, prev);
+			}
+			if (LINK == pRoot->_pRight)
+			{
+				_PreOrderThd(pRoot->_pRight, prev);
+
+			}
+		}
+	}
+private:
+	BinaryTreeThdNode<T>* _pRoot;
+};
+void FunTest()
+{
+	char arr[] = { '1', '2', '3', '#', '#', '4', '#', '#', '5' };
+	BinaryTreeThd<char> s(arr, sizeof(arr) / sizeof(arr[0]));
+	s.PreOrderThd();
+
+}
+int main()
+{
+	FunTest();
+	system("pause");
+	return 0;
+}
